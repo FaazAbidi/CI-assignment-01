@@ -7,6 +7,8 @@ class SelectionFunctions:
     This class contains static methods of different fitness functions
     These functions takes list of tuples as population and
     returns their fitness scores as list of integers
+
+    These functions are used in the EA class for both Parent Selection and Evaluating the fitness of the population
     """
 
     @staticmethod
@@ -22,21 +24,22 @@ class SelectionFunctions:
 
     
     @staticmethod
-    def truncation(population: list, fitness_scores: list, select_count: int) -> list:
+    def truncation(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
         """
         This method will select chromosomes with the highest fitness values from the population as selected_chromosome
+        when fit_bias is True but when bias is False, it will select chromosomes with the lowest fitness values
         """
         assert len(population) == len(fitness_scores)
         assert select_count <= len(population)
 
         fitness_scores_copy = fitness_scores.copy()
-        fitness_scores_copy.sort(reverse=True)
+        fitness_scores_copy.sort(reverse=fit_bias)
         selected_chromosome_index = [fitness_scores.index(value) for value in fitness_scores_copy[:select_count]]
         selected_chromosome = [population[index] for index in selected_chromosome_index]
         return selected_chromosome
 
     @staticmethod
-    def proportional_selection(population: list, fitness_scores: list, select_count: int) -> list:
+    def proportional_selection(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
         """
         This method will select chromosomes by following the proportional selection approach
         """
@@ -62,7 +65,7 @@ class SelectionFunctions:
         return selected_chromosome
 
     @staticmethod
-    def rank_based_selection(population: list, fitness_scores: list, select_count: int) -> list:
+    def rank_based_selection(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
         """
         In rank-based selection we will assign ranks and then normalize those ranks for creating 
         ranges.
@@ -72,7 +75,7 @@ class SelectionFunctions:
 
         # assigning ranks to chromosomes
         fitness_scores_copy = fitness_scores.copy()
-        fitness_scores_copy.sort()
+        fitness_scores_copy.sort(reverse=fit_bias)
         ranks = [fitness_scores_copy.index(x)+1 for x in fitness_scores]
 
         # normalizing ranks
@@ -96,7 +99,7 @@ class SelectionFunctions:
 
 
     @staticmethod
-    def binary_tournament(population: list, fitness_scores: list, select_count: int) -> list:
+    def binary_tournament(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
         """
         This method will select two chromosomes from the population as selected_chromosome using binary tournament approach
         """
@@ -107,8 +110,11 @@ class SelectionFunctions:
         selected_chromosome = []
         while len(selected_chromosome) < select_count:
             random_from_population = random.sample(population,k=toarnament_size)
-            best_candidate = max(fitness_scores[population.index(random_from_population[0])], fitness_scores[population.index(random_from_population[1])])
-            if population[fitness_scores.index(best_candidate)] not in selected_chromosome:
-                selected_chromosome.append(population[fitness_scores.index(best_candidate)])
+            if fit_bias:
+                candidate = max(fitness_scores[population.index(random_from_population[0])], fitness_scores[population.index(random_from_population[1])])
+            elif not fit_bias:
+                candidate = min(fitness_scores[population.index(random_from_population[0])], fitness_scores[population.index(random_from_population[1])])
+            if population[fitness_scores.index(candidate)] not in selected_chromosome:
+                selected_chromosome.append(population[fitness_scores.index(candidate)])
 
         return selected_chromosome

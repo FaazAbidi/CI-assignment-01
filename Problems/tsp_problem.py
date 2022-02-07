@@ -38,7 +38,7 @@ class TSPProblem(Problem):
         """
         all_cities = list(self.data.keys())
         random_population= []
-        for element in range(population_size):
+        for element in range(POPULATION_SIZE):
             random.shuffle(all_cities)
             # print(all_cities)
             random_population.append(all_cities.copy())
@@ -63,7 +63,7 @@ class TSPProblem(Problem):
         for i in range(len(chromosome)-1):
             total_distance += self.__distance(chromosome[i], chromosome[i+1])
         total_distance += self.__distance(chromosome[0], chromosome[-1])
-        return total_distance
+        return total_distance*-1
 
 
     def __distance(self, city1: int, city2: int)-> int:
