@@ -7,12 +7,15 @@ from reproductive_functions import *
 
 
 tsp = TSPProblem()
-ea = EA(tsp)
+kp = KnapsackProblem()
+ea = EA(kp)
 
 while ea.generation < GENERATIONS:
     print(ea.generation, ea.worst_fitness_score())
     ea.generate_offspring(Selection.ProportionalSelection)
     ea.evaluate_population(Selection.Truncation)
+
+# print(kp.data)
 
 
 # # print(len(ea.population))
