@@ -1,13 +1,12 @@
 from Problems.problem import Problem
 from selection_functions import SelectionFunctions
-from reproductive_functions import ReproductiveFunctions
 from enum import Enum
 
 # Global Parameters
-POPULATION_SIZE = 300
-OFFSPRING_SIZE = 100  # offspring size must be a multiple of 2 (even)
-GENERATIONS = 800
-MUTATION_RATE = 0.1
+POPULATION_SIZE = 100
+OFFSPRING_SIZE = 30  # offspring size must be a multiple of 2 (even)
+GENERATIONS = 500
+MUTATION_RATE = 0.2
 ITERATIONS = 10
 
 
@@ -40,20 +39,20 @@ class EA:
         if selection == Selection.Random:
             parents = SelectionFunctions.random(self.population, self.fitness_scores, OFFSPRING_SIZE)
         elif selection == Selection.Truncation:
-            parents = SelectionFunctions.truncation(self.population, self.fitness_scores, OFFSPRING_SIZE, True)
+            parents = SelectionFunctions.truncation(self.population, self.fitness_scores, OFFSPRING_SIZE)
         elif selection == Selection.ProportionalSelection:
-            parents = SelectionFunctions.proportional_selection(self.population, self.fitness_scores, OFFSPRING_SIZE, True)
+            parents = SelectionFunctions.proportional_selection(self.population, self.fitness_scores, OFFSPRING_SIZE)
         elif selection == Selection.RankBasedSelection:
-            parents = SelectionFunctions.rank_based_selection(self.population, self.fitness_scores, OFFSPRING_SIZE, True)
+            parents = SelectionFunctions.rank_based_selection(self.population, self.fitness_scores, OFFSPRING_SIZE)
         elif selection == Selection.BinaryTournament:
-            parents = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, OFFSPRING_SIZE, True)
+            parents = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, OFFSPRING_SIZE)
         
         for i in range(0,OFFSPRING_SIZE,2):
-            child1 = ReproductiveFunctions.crossover(parent1=parents[i], parent2=parents[i+1])
-            child2 = ReproductiveFunctions.crossover(parent1=parents[i], parent2=parents[i+1])
+            child1 = self.problem.crossover(parents[i], parents[i+1])
+            child2 = self.problem.crossover(parents[i],parents[i+1])
 
-            child1 = ReproductiveFunctions.mutation(child1, MUTATION_RATE)
-            child2 = ReproductiveFunctions.mutation(child2, MUTATION_RATE)
+            child1 = self.problem.mutation(child1, MUTATION_RATE)
+            child2 = self.problem.mutation(child2, MUTATION_RATE)
 
             self.population.append(child1)
             self.population.append(child2)
@@ -61,7 +60,7 @@ class EA:
 
     def evaluate_population(self, selection: Selection):
         """
-        This method will evaluate the existing population and kill the unfit chromosomes
+        This method will evaluate the existing population and select the fittest chromosomes
         """
         # updating the fitness scores
         self.problem.population = self.population
@@ -69,22 +68,20 @@ class EA:
 
         # Selecting the unfit chromosomes
         if selection == Selection.Random:
-            unfit_chromosomes = SelectionFunctions.random(self.population, self.fitness_scores, OFFSPRING_SIZE)
+            survivors = SelectionFunctions.random(self.population, self.fitness_scores, POPULATION_SIZE)
         elif selection == Selection.Truncation:
-            unfit_chromosomes = SelectionFunctions.truncation(self.population, self.fitness_scores, OFFSPRING_SIZE, False)
+            survivors = SelectionFunctions.truncation(self.population, self.fitness_scores, POPULATION_SIZE)
         elif selection == Selection.ProportionalSelection:
-            unfit_chromosomes = SelectionFunctions.proportional_selection(self.population, self.fitness_scores, OFFSPRING_SIZE, False)
+            survivors = SelectionFunctions.proportional_selection(self.population, self.fitness_scores, POPULATION_SIZE)
         elif selection == Selection.RankBasedSelection:
-            unfit_chromosomes = SelectionFunctions.rank_based_selection(self.population, self.fitness_scores, OFFSPRING_SIZE, False)
+            survivors = SelectionFunctions.rank_based_selection(self.population, self.fitness_scores, POPULATION_SIZE)
         elif selection == Selection.BinaryTournament:
-            unfit_chromosomes = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, OFFSPRING_SIZE, False)
+            survivors = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, POPULATION_SIZE)
 
         # killing the unfit chromosomes
-        for unfit_chromosome in unfit_chromosomes:
-            indx = self.population.index(unfit_chromosome)
-            self.population.pop(indx)
-            self.fitness_scores.pop(indx)
-        
+        self.population = survivors
+        self.problem.population = self.population
+        self.fitness_scores = self.problem.fitness_score()
 
         # incrementing the generation
         self.generation += 1

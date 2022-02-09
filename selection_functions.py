@@ -24,7 +24,7 @@ class SelectionFunctions:
 
     
     @staticmethod
-    def truncation(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
+    def truncation(population: list, fitness_scores: list, select_count: int) -> list:
         """
         This method will select chromosomes with the highest fitness values from the population as selected_chromosome
         when fit_bias is True but when bias is False, it will select chromosomes with the lowest fitness values
@@ -33,13 +33,13 @@ class SelectionFunctions:
         assert select_count <= len(population)
 
         fitness_scores_copy = fitness_scores.copy()
-        fitness_scores_copy.sort(reverse=fit_bias)
+        fitness_scores_copy.sort(reverse=True)
         selected_chromosome_index = [fitness_scores.index(value) for value in fitness_scores_copy[:select_count]]
         selected_chromosome = [population[index] for index in selected_chromosome_index]
         return selected_chromosome
 
     @staticmethod
-    def proportional_selection(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
+    def proportional_selection(population: list, fitness_scores: list, select_count: int) -> list:
         """
         This method will select chromosomes by following the proportional selection approach
         """
@@ -59,13 +59,16 @@ class SelectionFunctions:
         while len(selected_chromosome) < select_count:
             random_val = random.random()
             for i in range(len(ranges)):
-                if random_val >= ranges[i][0] and random_val <= ranges[i][1] and population[i] not in selected_chromosome:
+                # print(ranges[i][0], ranges[i][1], random_val)
+                if random_val > ranges[i][0] and random_val <= ranges[i][1] and population[i]:
+                    # print("inside if", select_count, random_val)
                     selected_chromosome.append(population[i])
 
+        assert len(selected_chromosome) == select_count
         return selected_chromosome
 
     @staticmethod
-    def rank_based_selection(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
+    def rank_based_selection(population: list, fitness_scores: list, select_count: int) -> list:
         """
         In rank-based selection we will assign ranks and then normalize those ranks for creating 
         ranges.
@@ -75,11 +78,11 @@ class SelectionFunctions:
 
         # assigning ranks to chromosomes
         fitness_scores_copy = fitness_scores.copy()
-        fitness_scores_copy.sort(reverse=fit_bias)
+        fitness_scores_copy.sort(reverse=True)
         ranks = [fitness_scores_copy.index(x)+1 for x in fitness_scores]
 
         # normalizing ranks
-        ranks = [x/sum(ranks) for x in ranks]
+        ranks = [(x/sum(ranks)) for x in ranks]
 
         # creating ranges for each chromosome using their normalized fitness scores
         ranges = [(0, ranks[0])]
@@ -92,29 +95,32 @@ class SelectionFunctions:
         while len(selected_chromosome) < select_count:
             random_val = random.random()
             for i in range(len(ranges)):
-                if random_val >= ranges[i][0] and random_val <= ranges[i][1] and population[i] not in selected_chromosome:
+                if random_val > ranges[i][0] and random_val <= ranges[i][1] and population[i]:
                     selected_chromosome.append(population[i])
         
+        assert len(selected_chromosome) == select_count
         return selected_chromosome
 
 
     @staticmethod
-    def binary_tournament(population: list, fitness_scores: list, select_count: int, fit_bias: bool) -> list:
+    def binary_tournament(population: list, fitness_scores: list, select_count: int) -> list:
         """
         This method will select two chromosomes from the population as selected_chromosome using binary tournament approach
         """
         assert len(population) == len(fitness_scores)
         assert select_count <= len(population)
 
-        toarnament_size = 2
         selected_chromosome = []
         while len(selected_chromosome) < select_count:
-            random_from_population = random.sample(population,k=toarnament_size)
-            if fit_bias:
-                candidate = max(fitness_scores[population.index(random_from_population[0])], fitness_scores[population.index(random_from_population[1])])
-            elif not fit_bias:
-                candidate = min(fitness_scores[population.index(random_from_population[0])], fitness_scores[population.index(random_from_population[1])])
-            if population[fitness_scores.index(candidate)] not in selected_chromosome:
-                selected_chromosome.append(population[fitness_scores.index(candidate)])
+            val_1 = random.randint(0, len(population)-1)
+            val_2 = random.randint(0, len(population)-1)
 
+            candidate = max(fitness_scores[val_1], fitness_scores[val_2])
+            if candidate == fitness_scores[val_1]:
+                candidate = val_1
+            else:
+                candidate = val_2
+            selected_chromosome.append(population[candidate])
+
+        assert len(selected_chromosome) == select_count
         return selected_chromosome
