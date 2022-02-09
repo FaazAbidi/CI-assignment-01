@@ -1,6 +1,5 @@
 from Problems.problem import Problem
 from selection_functions import SelectionFunctions
-from reproductive_functions import ReproductiveFunctions
 from enum import Enum
 
 # Global Parameters
@@ -49,11 +48,11 @@ class EA:
             parents = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, OFFSPRING_SIZE)
         
         for i in range(0,OFFSPRING_SIZE,2):
-            child1 = ReproductiveFunctions.crossover(parent1=parents[i], parent2=parents[i+1])
-            child2 = ReproductiveFunctions.crossover(parent1=parents[i], parent2=parents[i+1])
+            child1 = self.problem.crossover(parents[i], parents[i+1])
+            child2 = self.problem.crossover(parents[i],parents[i+1])
 
-            child1 = ReproductiveFunctions.mutation(child1, MUTATION_RATE)
-            child2 = ReproductiveFunctions.mutation(child2, MUTATION_RATE)
+            child1 = self.problem.mutation(child1, MUTATION_RATE)
+            child2 = self.problem.mutation(child2, MUTATION_RATE)
 
             self.population.append(child1)
             self.population.append(child2)
@@ -61,7 +60,7 @@ class EA:
 
     def evaluate_population(self, selection: Selection):
         """
-        This method will evaluate the existing population and kill the unfit chromosomes
+        This method will evaluate the existing population and select the fittest chromosomes
         """
         # updating the fitness scores
         self.problem.population = self.population
