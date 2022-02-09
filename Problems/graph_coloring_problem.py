@@ -11,7 +11,7 @@ class GraphColoringProblem(Problem):
     """
     def __init__(self):
 
-        self.chromosome = []
+        self.data = {}
         self.edges = {}
         self.adj_matrix = []
         self.__load_data()
@@ -39,7 +39,9 @@ class GraphColoringProblem(Problem):
                 self.edges[int(line[2])].append(int(line[1]))
 
         num_keys = len(self.edges.keys())
+        self.data['num_keys'] = num_keys
         max_degree = max(len(item) for item in self.data.values())
+        self.data['max_degree'] = max_degree 
 
         for i in range(num_keys):
             self.adj_matrix.append([0 for i in range(num_keys)])
@@ -55,9 +57,33 @@ class GraphColoringProblem(Problem):
         """
         random_population = []
         for element in range(POPULATION_SIZE):
-            chromosome = [tuple(np.random.choice(range(256), size=3)) for i in range(len(self.adj_matrix))]
+            np.random.seed()
+            chromosome = [tuple(np.random.choice(range(self.data['max_degree']), size=3)) for i in range(len(self.adj_matrix))]
             random_population.append(chromosome)
         return random_population
+    
+    def fitness_score(self) -> list:
+        """
+        This method will calculate the fitness score of the population
+        """
+        fitness_score = []
+        for chromosome in self.population:
+            fitness_score.append(self.__fitness_function(chromosome))
+        return fitness_score
+
+    def __fitness_function(self, chromosome: list)-> int:
+        """
+        This method will calculate the fitness of the chromosome
+        """
+        fitness = 0
+        for key in self.edges:
+            for nodes in self.edges[key]:
+                if chromosome[key+1] == chromosome[nodes+1]:
+                    fitness +=1
+        return fitness
+
+    
+
 
     
         
