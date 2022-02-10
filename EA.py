@@ -3,10 +3,10 @@ from selection_functions import SelectionFunctions
 from enum import Enum
 
 # Global Parameters
-POPULATION_SIZE = 100
+POPULATION_SIZE = 50
 OFFSPRING_SIZE = 30  # offspring size must be a multiple of 2 (even)
-GENERATIONS = 500
-MUTATION_RATE = 0.2
+GENERATIONS = 10000
+MUTATION_RATE = 0.5
 ITERATIONS = 10
 
 
@@ -78,7 +78,7 @@ class EA:
         elif selection == Selection.BinaryTournament:
             survivors = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, POPULATION_SIZE)
 
-        # killing the unfit chromosomes
+        # updating the population with survivors
         self.population = survivors
         self.problem.population = self.population
         self.fitness_scores = self.problem.fitness_score()
@@ -99,3 +99,9 @@ class EA:
         This method will return the worst fitness score of the current population
         """
         return min(self.fitness_scores)
+
+    def averaga_fitness_score(self):
+        """
+        This method will return the average fitness score of the current population
+        """
+        return sum(self.fitness_scores) / len(self.fitness_scores)
