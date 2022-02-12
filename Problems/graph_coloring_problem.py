@@ -60,10 +60,15 @@ class GC(Problem):
         for element in range(POPULATION_SIZE):
             chromosome = []
             for i in range(self.data['num_keys']):
-                np.random.seed()
-                color = random.randint(0, self.data['max_degree']*4)
-                gene = (color, color, color)
-                chromosome.append(gene)
+                while True:
+                    np.random.seed()
+                    color = random.randint(0, self.data['max_degree']*4)
+                    gene = (color,color,color)                                  # RGB
+                    if gene not in chromosome:
+                        chromosome.append(gene)
+                        break
+                    else:
+                        continue
             random_population.append(chromosome)
         return random_population
     
