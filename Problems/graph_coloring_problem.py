@@ -1,9 +1,13 @@
+from scipy import rand
+from sklearn.utils import check_array
 from Problems.problem import Problem
 from selection_functions import SelectionFunctions
 from EA import *
 import random
 import numpy as np
+import more_itertools as mit
 
+from test import check_chromosome
 
 class GC(Problem):
     """
@@ -39,10 +43,11 @@ class GC(Problem):
             else:
                 self.edges[int(line[2])] = []
                 self.edges[int(line[2])].append(int(line[1]))
+        file.close()
 
         num_keys = len(self.edges.keys())
         self.data['num_keys'] = num_keys
-        max_degree = max(len(item) for item in self.data.keys())
+        max_degree = max(len(item) for item in self.edges.values())
         self.data['max_degree'] = max_degree
 
         for i in range(num_keys):
@@ -87,7 +92,7 @@ class GC(Problem):
         """
         This method will calculate the fitness of the chromosome
         """
-        return len(set(chromosome))
+        return -len(set(chromosome))
 
     # checks if the chromosome is a viable solution
     def check_chromosome(self, chromosome:list) -> bool:
@@ -96,7 +101,7 @@ class GC(Problem):
             # iterates over all adjacent nodes
             for j in self.edges[i + 1]:
                 if chromosome[i] == chromosome[j-1]:
-                    return False
+                    return False   
         return True
 
     def crossover(self, parent1: list, parent2: list) -> list:
@@ -104,27 +109,39 @@ class GC(Problem):
         This method will perform one point crossover 
         We have eliminated the possibility of wrong chromosomes. 
         """
-        while True:
-            crossover_point = random.randint(0, len(parent1)-1)
+        for i in range(500):
+            crossover_point = random.randint(0, len(parent1))
             child = parent1[:crossover_point] + parent2[crossover_point:]
-            check = self.check_chromosome(child)
+            check = check_chromosome(child)
             if check:
                 return child
-            else:
-                continue
+
+        a = [parent1, parent2]
+        random.shuffle(a)
+        return a[0]
 
     def mutation(self, child: list, mutation_rate: float()) -> list:
         """
         For the mutation, we will reassign a random gene with the value of an existing gene
         """
-        while True:
-            random_val = random.random()
-            if random_val < mutation_rate:
-                random_index_1 = random.randint(0, len(child)-1)
-                random_index_2 = random.randint(0, len(child)-1)
-                child[random_index_1] = child[random_index_2]
-                check = self.check_chromosome(child)
+        c = child
+        for i in range(500):
+            random_value = random.random()
+            if random_value < mutation_rate:
+                np.random.seed()
+                ri_1 = random.randint(0, len(c)-1)
+                np.random.seed()
+                ri_2 = random.randint(0, len(c)-1)
+                temp = c[ri_1]
+                c[ri_1] = c[ri_2]
+                c[ri_2] = temp
+                check = check_chromosome(c)
                 if check:
-                    return child
-                else:
-                    continue
+                    return c
+        return child
+
+
+        
+            
+
+
