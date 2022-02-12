@@ -29,6 +29,7 @@ averaga_fitness_scores = []
 
 for i in range(GENERATIONS):
 # #     # print(EA.population)
+    print(i)
     EA.generate_offspring(Selection.BinaryTournament)
     EA.evaluate_population(Selection.Truncation)
     best_fitness_scores.append(EA.best_fitness_score())

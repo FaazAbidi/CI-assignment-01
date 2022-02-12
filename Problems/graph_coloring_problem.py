@@ -68,7 +68,7 @@ class GC(Problem):
                 flag = True
                 while flag:
                     np.random.seed()
-                    color = random.randint(0, self.data['max_degree']*4)
+                    color = random.randint(0, self.data['max_degree']*2)
                     # RGB
                     gene = (color, color, color)
                     if gene not in chromosome:
@@ -124,21 +124,17 @@ class GC(Problem):
         """
         For the mutation, we will reassign a random gene with the value of an existing gene
         """
-        c = child
-        for i in range(500):
-            random_value = random.random()
-            if random_value < mutation_rate:
-                np.random.seed()
-                ri_1 = random.randint(0, len(c)-1)
-                np.random.seed()
-                ri_2 = random.randint(0, len(c)-1)
-                temp = c[ri_1]
-                c[ri_1] = c[ri_2]
-                c[ri_2] = temp
-                check = check_chromosome(c)
-                if check:
-                    return c
+        random_value = random.random()
+        if random_value < mutation_rate:
+            c = child
+            ri_1 = random.randint(0, len(c)-1)
+            ri_2 = random.randint(0, len(c)-1)
+            c[ri_1] = c[ri_2]
+            check = check_chromosome(c)
+            if check:
+                return c
         return child
+
 
 
         
