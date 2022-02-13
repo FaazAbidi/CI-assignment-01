@@ -14,9 +14,9 @@ plt.rcParams["figure.figsize"] = (10,8)
 
 def main():
     # instantiate a problem
-    TSP = TSPProblem()
+    gc = GC()
     # # applying the EA to the problem
-    ea = EA(TSP)
+    ea = EA(gc)
 
     best_fitness_scores = []
     averaga_fitness_scores = []

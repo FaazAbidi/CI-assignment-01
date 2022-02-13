@@ -5,9 +5,7 @@ from selection_functions import SelectionFunctions
 from EA import *
 import random
 import numpy as np
-import more_itertools as mit
 
-from test import check_chromosome
 
 class GC(Problem):
     """
@@ -119,7 +117,7 @@ class GC(Problem):
                 child = parent1[:crossover_point_2] + parent2[crossover_point_2:crossover_point_1] + parent1[crossover_point_1:]
             else:
                 child = parent1[:crossover_point_1] + parent2[crossover_point_1:]
-            check = check_chromosome(child)
+            check = self.check_chromosome(child)
             if check:
                 return child
         a = [parent1, parent2]
@@ -136,7 +134,7 @@ class GC(Problem):
             ri_1 = random.randint(0, len(c)-1)
             ri_2 = random.randint(0, len(c)-1)
             c[ri_1] = c[ri_2]
-            check = check_chromosome(c)
+            check = self.check_chromosome(c)
             if check:
                 return c
         return child
