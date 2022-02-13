@@ -1,20 +1,16 @@
 from EA import *
 from Problems.tsp_problem import TSPProblem
 from Problems.knapsack_problem import KnapsackProblem
-from Problems.graph_coloring_problem import GraphColoringProblem
 from Problems.graph_coloring_problem import GC
 from Problems.problem import Problem
 import numpy as np
 from matplotlib import pyplot as plt
-<<<<<<< HEAD
-=======
 from tqdm import tqdm
 
 
 plt.rcParams['text.usetex'] = True
 plt.rcParams["figure.figsize"] = (10,8)
 
->>>>>>> e6ef9063f95291b59bba5210445d929b6da807f1
 
 from test import check_chromosome
 

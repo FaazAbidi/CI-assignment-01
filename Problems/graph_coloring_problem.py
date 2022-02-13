@@ -68,7 +68,7 @@ class GC(Problem):
                 flag = True
                 while flag:
                     np.random.seed()
-                    color = random.randint(0, self.data['max_degree']+10)
+                    color = random.randint(0, self.data['max_degree']+15)
                     # RGB
                     gene = (color, color, color)
                     if gene not in chromosome:
