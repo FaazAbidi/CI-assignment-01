@@ -3,11 +3,13 @@ from selection_functions import SelectionFunctions
 from enum import Enum
 
 # Global Parameters
-POPULATION_SIZE = 50
-OFFSPRING_SIZE = 30  # offspring size must be a multiple of 2 (even)
+# BEST PARAMETERS SO FAR!!!
+POPULATION_SIZE = 110
+OFFSPRING_SIZE = 94  # offspring size must be a multiple of 2 (even)
 GENERATIONS = 10000
-MUTATION_RATE = 0.5
+MUTATION_RATE = 0.73                                                                                                        
 ITERATIONS = 10
+
 
 
 class Selection(Enum):
