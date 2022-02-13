@@ -52,21 +52,9 @@ class EA:
         for i in range(0,OFFSPRING_SIZE,2):
             child1 = self.problem.crossover(parents[i],parents[i+1])
             child2 = self.problem.crossover(parents[i],parents[i+1])
-            # if not self.problem.check_chromosome(child1):
-            # print('crossover', self.problem.check_chromosome(child1))
-            # if not self.problem.check_chromosome(child1):
-            # print('crossover', self.problem.check_chromosome(child2))
-            assert self.problem.check_chromosome(child1)
-            assert self.problem.check_chromosome(child2)
-
+            
             child1 = self.problem.mutation(child1, MUTATION_RATE)
             child2 = self.problem.mutation(child2, MUTATION_RATE)
-            # if not self.problem.check_chromosome(child1):
-            # print('mutation', self.problem.check_chromosome(child1), 'child1')        
-            # if not self.problem.check_chromosome(child2):
-            # print('mutation', self.problem.check_chromosome(child2), 'child2')
-            assert self.problem.check_chromosome(child1)
-            assert self.problem.check_chromosome(child2)
 
             self.population.append(child1)
             self.population.append(child2)
