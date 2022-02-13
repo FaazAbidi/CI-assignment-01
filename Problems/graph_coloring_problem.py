@@ -5,9 +5,7 @@ from selection_functions import SelectionFunctions
 from EA import *
 import random
 import numpy as np
-# import more_itertools as mit
 
-# from test import check_chromosome
 
 class GC(Problem):
     """
@@ -68,7 +66,7 @@ class GC(Problem):
                 flag = True
                 while flag:
                     np.random.seed()
-                    color = random.randint(0, self.data['max_degree']+15)
+                    color = random.randint(0, self.data['max_degree']*2)
                     # RGB
                     gene = (color, color, color)
                     if gene not in chromosome:
@@ -106,14 +104,20 @@ class GC(Problem):
 
     def crossover(self, parent1: list, parent2: list) -> list:
         """
-        This method will perform one point crossover 
+        This method will perform two point crossover 
         We have eliminated the possibility of wrong chromosomes. 
         """
         
         for i in range(500):
-            crossover_point = random.randint(0, len(parent1))
-            child = parent1[:crossover_point] + parent2[crossover_point:]
-            check = check_chromosome(child)
+            crossover_point_1 = random.randint(0, len(parent1))
+            crossover_point_2 = random.randint(0, len(parent1))
+            if crossover_point_1 < crossover_point_2:
+                child = parent1[:crossover_point_1] + parent2[crossover_point_1:crossover_point_2] + parent1[crossover_point_2:]
+            elif crossover_point_1 > crossover_point_2:
+                child = parent1[:crossover_point_2] + parent2[crossover_point_2:crossover_point_1] + parent1[crossover_point_1:]
+            else:
+                child = parent1[:crossover_point_1] + parent2[crossover_point_1:]
+            check = self.check_chromosome(child)
             if check:
                 return child
         a = [parent1, parent2]
@@ -130,7 +134,7 @@ class GC(Problem):
             ri_1 = random.randint(0, len(c)-1)
             ri_2 = random.randint(0, len(c)-1)
             c[ri_1] = c[ri_2]
-            check = check_chromosome(c)
+            check = self.check_chromosome(c)
             if check:
                 return c
         return child

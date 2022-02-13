@@ -52,7 +52,7 @@ class EA:
         for i in range(0,OFFSPRING_SIZE,2):
             child1 = self.problem.crossover(parents[i],parents[i+1])
             child2 = self.problem.crossover(parents[i],parents[i+1])
-
+            
             child1 = self.problem.mutation(child1, MUTATION_RATE)
             child2 = self.problem.mutation(child2, MUTATION_RATE)
 
