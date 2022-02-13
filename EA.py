@@ -10,8 +10,8 @@ from enum import Enum
 # MUTATION_RATE = 0.70                                                                                          
 # ITERATIONS = 10
 
-POPULATION_SIZE = 50
-OFFSPRING_SIZE = 30 # offspring size must be a multiple of 2 (even)
+POPULATION_SIZE = 110
+OFFSPRING_SIZE = 94 # offspring size must be a multiple of 2 (even)
 GENERATIONS = 500
 MUTATION_RATE = 0.70                                                                                          
 ITERATIONS = 10

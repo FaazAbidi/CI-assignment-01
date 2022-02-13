@@ -28,8 +28,8 @@ def main():
         print(ea.generation, abs(ea.best_fitness_score()), len(ea.population))
 
         # evolutionary process
-        ea.generate_offspring(Selection.BinaryTournament)
-        ea.evaluate_population(Selection.Truncation)
+        ea.generate_offspring(Selection.RankBasedSelection)
+        ea.evaluate_population(Selection.RankBasedSelection)
 
         # append the best fitness score to the list for plotting
         best_fitness_scores.append(abs(ea.best_fitness_score()))
