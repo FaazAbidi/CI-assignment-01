@@ -21,10 +21,10 @@ def main():
     best_fitness_scores = []
     averaga_fitness_scores = []
 
-    file = open("Results/TSP/results_BT_and_Truncation.txt", "w")
+    # file = open("Results/TSP/results_BT_and_Truncation.txt", "w")
 
     for i in range(GENERATIONS):
-        file.write("{},{},{}\n".format(ea.generation, abs(ea.best_fitness_score()), abs(ea.averaga_fitness_score())))
+        # file.write("{},{},{}\n".format(ea.generation, abs(ea.best_fitness_score()), abs(ea.averaga_fitness_score())))
         print(ea.generation, abs(ea.best_fitness_score()), len(ea.population))
 
         # evolutionary process

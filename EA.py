@@ -6,7 +6,7 @@ from enum import Enum
 # BEST PARAMETERS SO FAR!!!
 POPULATION_SIZE = 110
 OFFSPRING_SIZE = 94  # offspring size must be a multiple of 2 (even)
-GENERATIONS = 5000
+GENERATIONS = 10000
 MUTATION_RATE = 0.70                                                                                          
 ITERATIONS = 10
 
