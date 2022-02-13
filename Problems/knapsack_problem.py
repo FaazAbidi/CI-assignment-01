@@ -21,7 +21,7 @@ class KnapsackProblem(Problem):
         chromosone representation
         """
         nodes_and_points = {}
-        file = open("KP_Dataset/low-dimensional/f10_l-d_kp_20_879", "r")
+        file = open("KP_Dataset/low-dimensional/f2_l-d_kp_20_878", "r")
         for i, line in enumerate(file.readlines()):
             if i == 0:
                 line = line.split()
