@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 
 edges = {}
 file = open("GC_Dataset/gcol1.txt", "r")
@@ -37,7 +37,7 @@ def check_chromosome(chromosome:list) -> bool:
     for i in range(len(chromosome)):
         # iterates over all adjacent nodes
         for j in edges[i + 1]:
-            if chromosome[i] == chromosome[j-1]:
+            if chromosome[i] == chromosome[j-1] and adj_matrix[i] == adj_matrix[j-1]:
                 return False
     return True
 
@@ -121,6 +121,7 @@ d = [(121, 121, 121), (121, 121, 121), (121, 121, 121), (121, 121, 121), (82, 82
 (121, 121, 121), (82, 82, 82), (121, 121, 121), (82, 82, 82), (121, 121, 121), (121, 121, 121), (104, 104, 104), (121, 121, 121), (82, 82, 82), (82, 82, 82), 
 (121, 121, 121), (121, 121, 121), (121, 121, 121), (104, 104, 104), (104, 104, 104), (151, 151, 151), (121, 121, 121), (121, 121, 121), (151, 151, 151), (104, 104, 104), (121, 121, 121), (104, 104, 104), (75, 75, 75), (104, 104, 104), (104, 104, 104), (121, 121, 121), (121, 121, 121), (75, 75, 75), (121, 121, 121), (151, 151, 151), (82, 82, 82), (121, 121, 121), (82, 82, 82), (75, 75, 75), (121, 121, 121), (121, 121, 121), (82, 82, 82), (75, 75, 75), (121, 121, 121), (104, 104, 104), (121, 121, 121), (75, 75, 75), (104, 104, 104), (104, 104, 104), (121, 121, 121), (104, 104, 104), (121, 121, 121), (121, 121, 121), (121, 121, 121), (121, 121, 121), (121, 121, 121), (104, 104, 104), (121, 121, 121), (104, 104, 104), (121, 121, 121), (75, 75, 75), (75, 75, 75), (82, 82, 82), (151, 151, 151), (121, 121, 121), (104, 104, 104), (75, 75, 75)]
 
+print(check_chromosome(d))
 # for i in range(len(d)):
 #     for nodes in edges[i + 1]:
 #         if d[i] == d[nodes - 1] and adj_matrix[i] == adj_matrix[nodes - 1]:
@@ -132,3 +133,40 @@ d = [(121, 121, 121), (121, 121, 121), (121, 121, 121), (121, 121, 121), (82, 82
 #     print('\n')
 
 # print(check_chromosome(d))
+
+
+random_population = []
+for element in range(20):
+    chromosome = []
+    for i in range(data['num_keys']):
+        flag = True
+        while flag:
+            np.random.seed()
+            color = random.randint(0, data['max_degree']*2)
+            # RGB
+            gene = (color, color, color)
+            if gene not in chromosome:
+                chromosome.append(gene)
+                flag = False
+            else:
+                continue
+    random_population.append(chromosome)
+
+def crossover(parent1: list, parent2: list) -> list:
+        """
+        This method will perform one point crossover 
+        We have eliminated the possibility of wrong chromosomes. 
+        """
+        for i in range(500):
+            crossover_point = random.randint(0, len(parent1))
+            child = parent1[:crossover_point] + parent2[crossover_point:]
+            check = check_chromosome(child)
+            if check:
+                return child
+
+        a = [parent1, parent2]
+        random.shuffle(a)
+        return a[0]
+
+# child = crossover(random_population[0], random_population[1])
+# print(check_chromosome(child))

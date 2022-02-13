@@ -68,7 +68,7 @@ class GC(Problem):
                 flag = True
                 while flag:
                     np.random.seed()
-                    color = random.randint(0, self.data['max_degree']*2)
+                    color = random.randint(0, self.data['max_degree']+10)
                     # RGB
                     gene = (color, color, color)
                     if gene not in chromosome:
@@ -100,7 +100,7 @@ class GC(Problem):
         for i in range(len(chromosome)):
             # iterates over all adjacent nodes
             for j in self.edges[i + 1]:
-                if chromosome[i] == chromosome[j-1]:
+                if chromosome[i] == chromosome[j-1] and self.adj_matrix[i] == self.adj_matrix[j-1]:
                     return False   
         return True
 
@@ -109,13 +109,13 @@ class GC(Problem):
         This method will perform one point crossover 
         We have eliminated the possibility of wrong chromosomes. 
         """
+        
         for i in range(500):
             crossover_point = random.randint(0, len(parent1))
             child = parent1[:crossover_point] + parent2[crossover_point:]
             check = check_chromosome(child)
             if check:
                 return child
-
         a = [parent1, parent2]
         random.shuffle(a)
         return a[0]

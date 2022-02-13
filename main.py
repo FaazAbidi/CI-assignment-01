@@ -4,6 +4,7 @@ from Problems.knapsack_problem import KnapsackProblem
 from Problems.graph_coloring_problem import GC
 from Problems.problem import Problem
 import numpy as np
+from matplotlib import pyplot as plt
 
 from test import check_chromosome
 
@@ -26,10 +27,11 @@ EA = EA(gc)
 
 best_fitness_scores = []
 averaga_fitness_scores = []
-
+gen = []
 for i in range(GENERATIONS):
-# #     # print(EA.population)
     print(i)
+    gen.append(i)
+# #     # print(EA.population)
     EA.generate_offspring(Selection.BinaryTournament)
     EA.evaluate_population(Selection.Truncation)
     best_fitness_scores.append(EA.best_fitness_score())
@@ -37,8 +39,14 @@ for i in range(GENERATIONS):
 # g = EA.population
 # for i in g:
 #     print(i)
+best_positive = [ -x for x in best_fitness_scores]
+avg_positive = [ -x for x in averaga_fitness_scores]
 print(best_fitness_scores)
 print(averaga_fitness_scores)
+plt.figure(figsize=(10,6))
+# plt.plot(gen, best_positive)
+plt.plot(gen, best_fitness_scores)
+plt.show()
 # g = EA.population
 # for i in g:
 #     print(i)
