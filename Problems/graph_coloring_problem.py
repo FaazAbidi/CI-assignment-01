@@ -1,7 +1,6 @@
 from scipy import rand
 from sklearn.utils import check_array
 from Problems.problem import Problem
-from selection_functions import SelectionFunctions
 from EA import *
 import random
 import numpy as np

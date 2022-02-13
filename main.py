@@ -17,8 +17,7 @@ def main():
     # TSP = TSPProblem()
     gc = GC()
     # # applying the EA to the problem
-    ea = EA(GC)
-
+    ea = EA(gc)
     best_fitness_scores = []
     averaga_fitness_scores = []
 
@@ -29,7 +28,7 @@ def main():
         print(ea.generation, abs(ea.best_fitness_score()), len(ea.population))
 
         # evolutionary process
-        ea.generate_offspring(Selection.Truncation)
+        ea.generate_offspring(Selection.BinaryTournament)
         ea.evaluate_population(Selection.Truncation)
 
         # append the best fitness score to the list for plotting
