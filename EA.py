@@ -6,8 +6,8 @@ from enum import Enum
 # BEST PARAMETERS SO FAR!!!
 POPULATION_SIZE = 110
 OFFSPRING_SIZE = 94  # offspring size must be a multiple of 2 (even)
-GENERATIONS = 10000
-MUTATION_RATE = 0.73                                                                                                        
+GENERATIONS = 5000
+MUTATION_RATE = 0.70                                                                                          
 ITERATIONS = 10
 
 
@@ -52,13 +52,9 @@ class EA:
         for i in range(0,OFFSPRING_SIZE,2):
             child1 = self.problem.crossover(parents[i],parents[i+1])
             child2 = self.problem.crossover(parents[i],parents[i+1])
-            print('crossover', self.problem.check_chromosome(child1))
-            print('crossover', self.problem.check_chromosome(child2))
 
             child1 = self.problem.mutation(child1, MUTATION_RATE)
             child2 = self.problem.mutation(child2, MUTATION_RATE)
-            # print('mutation', self.problem.check_chromosome(child1), 'child1')        
-            # print('mutation', self.problem.check_chromosome(child2), 'child2')
 
             self.population.append(child1)
             self.population.append(child2)

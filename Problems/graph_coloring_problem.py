@@ -5,9 +5,9 @@ from selection_functions import SelectionFunctions
 from EA import *
 import random
 import numpy as np
-import more_itertools as mit
+# import more_itertools as mit
 
-from test import check_chromosome
+# from test import check_chromosome
 
 class GC(Problem):
     """
