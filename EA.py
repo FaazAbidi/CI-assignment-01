@@ -7,7 +7,7 @@ from enum import Enum
 POPULATION_SIZE = 110
 OFFSPRING_SIZE = 94  # offspring size must be a multiple of 2 (even)
 GENERATIONS = 10000
-MUTATION_RATE = 0.73                                                                                                        
+MUTATION_RATE = 0.70                                                                                          
 ITERATIONS = 10
 
 
@@ -52,7 +52,6 @@ class EA:
         for i in range(0,OFFSPRING_SIZE,2):
             child1 = self.problem.crossover(parents[i],parents[i+1])
             child2 = self.problem.crossover(parents[i],parents[i+1])
-            
             child1 = self.problem.mutation(child1, MUTATION_RATE)
             child2 = self.problem.mutation(child2, MUTATION_RATE)
 
