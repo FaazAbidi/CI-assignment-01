@@ -61,7 +61,6 @@ class KnapsackProblem(Problem):
             fitness_score.append(self.__fitness_function(chromosome))
         return fitness_score
 
-
     def __fitness_function(self, chromosome: list)-> int:
         """
         This method will calculate the fitness of the chromosome

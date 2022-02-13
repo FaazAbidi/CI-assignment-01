@@ -3,11 +3,19 @@ from selection_functions import SelectionFunctions
 from enum import Enum
 
 # Global Parameters
-POPULATION_SIZE = 100
-OFFSPRING_SIZE = 30  # offspring size must be a multiple of 2 (even)
+# BEST PARAMETERS SO FAR FOR TSP!!!
+# POPULATION_SIZE = 110
+# OFFSPRING_SIZE = 94  # offspring size must be a multiple of 2 (even)
+# GENERATIONS = 10000
+# MUTATION_RATE = 0.70                                                                                          
+# ITERATIONS = 10
+
+POPULATION_SIZE = 50
+OFFSPRING_SIZE = 30 # offspring size must be a multiple of 2 (even)
 GENERATIONS = 500
-MUTATION_RATE = 0.2
+MUTATION_RATE = 0.70                                                                                          
 ITERATIONS = 10
+
 
 
 class Selection(Enum):
@@ -48,7 +56,7 @@ class EA:
             parents = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, OFFSPRING_SIZE)
         
         for i in range(0,OFFSPRING_SIZE,2):
-            child1 = self.problem.crossover(parents[i], parents[i+1])
+            child1 = self.problem.crossover(parents[i],parents[i+1])
             child2 = self.problem.crossover(parents[i],parents[i+1])
 
             child1 = self.problem.mutation(child1, MUTATION_RATE)
@@ -78,7 +86,7 @@ class EA:
         elif selection == Selection.BinaryTournament:
             survivors = SelectionFunctions.binary_tournament(self.population, self.fitness_scores, POPULATION_SIZE)
 
-        # killing the unfit chromosomes
+        # updating the population with survivors
         self.population = survivors
         self.problem.population = self.population
         self.fitness_scores = self.problem.fitness_score()
@@ -99,3 +107,9 @@ class EA:
         This method will return the worst fitness score of the current population
         """
         return min(self.fitness_scores)
+
+    def averaga_fitness_score(self):
+        """
+        This method will return the average fitness score of the current population
+        """
+        return sum(self.fitness_scores) / len(self.fitness_scores)

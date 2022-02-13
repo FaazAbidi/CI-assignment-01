@@ -1,6 +1,7 @@
 from enum import Enum
 from EA import *
 import random
+import numpy as np
 
 class SelectionFunctions:
     """
@@ -27,7 +28,6 @@ class SelectionFunctions:
     def truncation(population: list, fitness_scores: list, select_count: int) -> list:
         """
         This method will select chromosomes with the highest fitness values from the population as selected_chromosome
-        when fit_bias is True but when bias is False, it will select chromosomes with the lowest fitness values
         """
         assert len(population) == len(fitness_scores)
         assert select_count <= len(population)
@@ -50,22 +50,22 @@ class SelectionFunctions:
         selected_chromosome = []
         
         # creating ranges for each chromosome using their normalized fitness scores
-        ranges = [(0, normalized_values[0])]
-        for i in range(len(normalized_values)-1):
-            ranges.append((ranges[i][1], ranges[i][1]+normalized_values[i+1],))
+        # ranges = [(0, normalized_values[0])]
+        # for i in range(len(normalized_values)-1):
+        #     ranges.append((ranges[i][1], ranges[i][1]+normalized_values[i+1],))
 
         # generating random numbers between 0 and 1 and making sure that they doesn't lie in the same range
         # and selecting those who are in the range
-        while len(selected_chromosome) < select_count:
-            random_val = random.random()
-            for i in range(len(ranges)):
-                # print(ranges[i][0], ranges[i][1], random_val)
-                if random_val > ranges[i][0] and random_val <= ranges[i][1] and population[i]:
-                    # print("inside if", select_count, random_val)
-                    selected_chromosome.append(population[i])
-
-        assert len(selected_chromosome) == select_count
-        return selected_chromosome
+        # while len(selected_chromosome) < select_count:
+        #     random_val = random.random()
+        #     for i in range(len(ranges)):
+        #         # print(ranges[i][0], ranges[i][1], random_val)
+        #         if random_val > ranges[i][0] and random_val <= ranges[i][1]:
+        #             # print("inside if", select_count, random_val)
+        #             selected_chromosome.append(population[i])
+        
+        # assert len(selected_chromosome) == select_count
+        return random.choices(population, weights=normalized_values, k=select_count)
 
     @staticmethod
     def rank_based_selection(population: list, fitness_scores: list, select_count: int) -> list:
@@ -78,28 +78,29 @@ class SelectionFunctions:
 
         # assigning ranks to chromosomes
         fitness_scores_copy = fitness_scores.copy()
-        fitness_scores_copy.sort(reverse=True)
+        fitness_scores_copy.sort(reverse=False)
         ranks = [fitness_scores_copy.index(x)+1 for x in fitness_scores]
+        selected_chromosome = []
 
         # normalizing ranks
         ranks = [(x/sum(ranks)) for x in ranks]
 
         # creating ranges for each chromosome using their normalized fitness scores
-        ranges = [(0, ranks[0])]
-        for i in range(len(ranks)-1):
-            ranges.append((ranges[i][1], ranges[i][1]+ranks[i+1],))
+        # ranges = [(0, ranks[0])]
+        # for i in range(len(ranks)-1):
+        #     ranges.append((ranges[i][1], ranges[i][1]+ranks[i+1],))
         
         # generating random numbers between 0 and 1 and making sure that they doesn't lie in the same range
         # and selecting those who are in the range
-        selected_chromosome = []
-        while len(selected_chromosome) < select_count:
-            random_val = random.random()
-            for i in range(len(ranges)):
-                if random_val > ranges[i][0] and random_val <= ranges[i][1] and population[i]:
-                    selected_chromosome.append(population[i])
+        # selected_chromosome = []
+        # while len(selected_chromosome) < select_count:
+        #     random_val = random.random()
+        #     for i in range(len(ranges)):
+        #         if random_val > ranges[i][0] and random_val <= ranges[i][1]:
+        #             selected_chromosome.append(population[i])
         
-        assert len(selected_chromosome) == select_count
-        return selected_chromosome
+        # assert len(selected_chromosome) == select_count
+        return random.choices(population, weights=ranks, k=select_count)
 
 
     @staticmethod

@@ -2,6 +2,7 @@ from Problems.problem import Problem
 from selection_functions import SelectionFunctions
 from EA import *
 import random
+import numpy as np
 
 class TSPProblem(Problem):
     """
@@ -44,36 +45,7 @@ class TSPProblem(Problem):
             random_population.append(all_cities.copy())
         return random_population
 
-    
-    def fitness_score(self)-> list:
-        """
-        This method will calculate the fitness score of the population
-        """
-        fitness_score = []
-        for chromosome in self.population:
-            fitness_score.append(self.__fitness_function(chromosome))
-        return fitness_score
-
-
-    def __fitness_function(self, chromosome: list)-> int:
-        """
-        This method will calculate the fitness of the chromosome
-        """
-        total_distance = 0
-        for i in range(len(chromosome)-1):
-            total_distance += self.__distance(chromosome[i], chromosome[i+1])
-        total_distance += self.__distance(chromosome[0], chromosome[-1])
-        return total_distance*-1
-
-
-    def __distance(self, city1: int, city2: int)-> int:
-        """
-        This method will calculate the distance between two cities
-        """
-        return ((self.data[city1][0] - self.data[city2][0])**2 + (self.data[city1][1] - self.data[city2][1])**2)**0.5
-
-
-    def crossover(parent1: list, parent2: list) -> list:
+    def crossover(self, parent1: list, parent2: list) -> list:
         """
         This method will perform crossover on the parents and return the child. It selects a random range and selects a sublist from the parents
         and merges them.
@@ -107,19 +79,77 @@ class TSPProblem(Problem):
         # check if the child is valid
         for each in child:
             assert child.count(each) == 1
-    
+
+        # child = []
+        # childP1 = []
+        # childP2 = []
+        
+        # geneA = int(random.random() * len(parent1))
+        # geneB = int(random.random() * len(parent1))
+        
+        # startGene = min(geneA, geneB)
+        # endGene = max(geneA, geneB)
+
+        # for i in range(startGene, endGene):
+        #     childP1.append(parent1[i])
+            
+        # childP2 = [item for item in parent2 if item not in childP1]
+
+        # child = childP1 + childP2
         return child
 
 
 
-    def mutation(child: list, mutation_rate: float()) -> list:
+
+
+    def mutation(self, child: list, mutation_rate: float()) -> list:
         """
         For the mutation, we will swap two values in the child at mutation_rate probability
         """
-        random_val = random.random()
-        if random_val < mutation_rate:
-            index1 = random.randint(0, len(child)-1)
-            index2 = random.randint(0, len(child)-1)
-            child[index1], child[index2] = child[index2], child[index1]
+        # random_val = random.random()
+        # if random_val < mutation_rate:
+        #     index1 = random.randint(0, len(child)-1)
+        #     index2 = random.randint(0, len(child)-1)
+        #     child[index1], child[index2] = child[index2], child[index1]
+
+        point1 = random.randint(0, len(child)-1)
+        point2 = random.randint(point1, len(child)-1)
+
+        c_middle = child[point1:point2]
+        c_first = child[:point1]
+        c_last = child[point2:]
+
+        child = c_first + c_middle[::-1] + c_last
         
         return child
+
+    
+    def fitness_score(self)-> list:
+        """
+        This method will calculate the fitness score of the population
+        """
+        fitness_score = []
+        for chromosome in self.population:
+            fitness_score.append(self.__fitness_function(chromosome))
+        return fitness_score
+
+
+    def __fitness_function(self, chromosome: list)-> int:
+        """
+        This method will calculate the fitness of the chromosome
+        """
+        total_distance = 0
+        for i in range(len(chromosome)-1):
+            total_distance += self.__distance(chromosome[i], chromosome[i+1])
+        total_distance += self.__distance(chromosome[0], chromosome[-1])
+        return total_distance*-1
+
+
+    def __distance(self, city1: int, city2: int)-> int:
+        """
+        This method will calculate the distance between two cities
+        """
+        return ((self.data[city1][0] - self.data[city2][0])**2 + (self.data[city1][1] - self.data[city2][1])**2)**0.5
+
+
+    
